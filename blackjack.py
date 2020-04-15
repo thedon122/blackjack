@@ -72,3 +72,22 @@ class hand():
     def showCards(self):
         for index in range(len(self.cardsInHand)):
             print(self.cardsInHand[index].color, self.cardsInHand[index].rank)
+pM = [0]
+pS = [0,0,0]
+while True:
+    try:
+        pM = int(input("How much money does the player have: "))
+    except ValueError:
+        print('Invalid entery try again')
+        continue
+    else:
+        break
+def startNewGame():
+    d = deck([])
+    d.createDeck()
+    d.randomizeDeck()
+    pH = hand([])
+    cH = hand([])
+    pH.startHand(d.cardDeck)
+    cH.startHand(d.cardDeck)
+    game = None
