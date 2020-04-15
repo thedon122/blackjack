@@ -91,6 +91,7 @@ def startNewGame():
     pH.startHand(d.cardDeck)
     cH.startHand(d.cardDeck)
     game = None
+    return game
 def playerTurn():
     pH.showCards()
     while True:
@@ -155,3 +156,11 @@ def computerTurn(pValue):
             cH.showCards()
             break
         return value,game 
+def blackJackGame():
+    game = startNewGame()
+    while game == None:
+        pValue,game = playerTurn()
+        if game:
+            break
+        value,game = computerTurn(pValue)
+blackJackGame()
