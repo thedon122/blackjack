@@ -91,3 +91,30 @@ def startNewGame():
     pH.startHand(d.cardDeck)
     cH.startHand(d.cardDeck)
     game = None
+def playerTurn():
+    pH.showCards()
+    while True:
+        while True:
+            pI = (input('Do you want to hit or stay')).lower()
+            if pI == hit or pI == stay:
+                break
+            else:
+                print('Invalid entry try again')
+                continue
+        if pI == hit and d.cardDeck:
+            pH.hit(d.cardDeck)
+        else:
+            break
+        pH.showCards()
+        for idx in len(pH.cardDeck):
+            if pH.cardDeck[idx].value == 'ask user':
+                pH.cardDeck[idx].value = int(input('plase enter 1 or 11 for this ace'))
+        value = sum(int([pH.cardDeck[idx].value for idx in len(pH.cardDeck)]))
+        if value > 21:
+            game = 'lose'
+            print('You lose')
+            break
+        elif value == 21:
+            game = 'win'
+            print('You win')
+    return value,game
