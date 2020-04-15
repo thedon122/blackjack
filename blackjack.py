@@ -57,3 +57,18 @@ class deck:
     def showDeck(self):
         for index in range(51):
             print(self.cardDeck[index].color, self.cardDeck[index].rank, self.cardDeck[index].value)
+class hand():
+    def __init__(self, cardsInHand):
+        self.cardsInHand = cardsInHand
+    def startHand(self, cardDeck):
+        for index in range(2):
+            self.cardsInHand.append(cardDeck[index])
+            cardDeck.remove(cardDeck[index])
+        
+    def hit(self, cardDeck):
+        self.cardsInHand.append(cardDeck[0])
+        cardDeck.remove(cardDeck[0])
+        
+    def showCards(self):
+        for index in range(len(self.cardsInHand)):
+            print(self.cardsInHand[index].color, self.cardsInHand[index].rank)
