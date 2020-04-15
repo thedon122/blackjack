@@ -118,3 +118,40 @@ def playerTurn():
             game = 'win'
             print('You win')
     return value,game
+def computerTurn(pValue):
+    cH.showCards()
+    while True:
+        for idx in len(pH.cardDeck):
+            if cH.cardDeck[idx].value == 'ask user':
+                cH.cardDeck[idx].value = int(input('plase enter 1 or 11 for this ace'))
+        value = sum(int([pH.cardDeck[index].rank for index in len(pH.cardDeck)]))
+        if value < 16:
+            cH.hit(d.cardDeck)
+            if value > 21:
+                cH.showCards()
+                game = 'win'
+                print('You win')
+                break
+            elif value == 21:
+                cH.showCards()
+                game = 'lose'
+                print('You lose')
+                break
+            continue
+        if pValue > value:
+            cH.hit(d.cardDeck)
+            if value > 21:
+                cH.showCards()
+                game = 'win'
+                print('You win')
+                break
+            elif value == 21:
+                cH.showCards()
+                game = 'lose'
+                print('You lose')
+                break
+            continue
+        if pValue < value:
+            cH.showCards()
+            break
+        return value,game 
