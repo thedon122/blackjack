@@ -96,7 +96,7 @@ def playerTurn():
     while True:
         while True:
             pI = (input('Do you want to hit or stay')).lower()
-            if pI == hit or pI == stay:
+            if pI == 'hit' or pI == 'stay':
                 break
             else:
                 print('Invalid entry try again')
