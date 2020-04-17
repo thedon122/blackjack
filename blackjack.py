@@ -1,11 +1,12 @@
 import random
-class card:
+class card():
+    # create a card object
     def __init__(self, color, rank, value):
         self.color = color
         self.rank = rank
         self.value = value
 
-class deck:
+class deck():
     def __init__(self, cardDeck):
         self.cardDeck = cardDeck
     # create a deck of 51 cards
@@ -57,10 +58,13 @@ class deck:
     def showDeck(self):
         for index in range(51):
             print(self.cardDeck[index].color, self.cardDeck[index].rank, self.cardDeck[index].value)
+
 class hand():
+    # creates a hand object
     def __init__(self, cardsInHand):
         self.cardsInHand = cardsInHand
     def startHand(self, cardDeck):
+    # creats a hand of 2 cards
         for index in range(2):
             self.cardsInHand.append(cardDeck[index])
             cardDeck.remove(cardDeck[index])
@@ -70,6 +74,7 @@ class hand():
         cardDeck.remove(cardDeck[0])
         
     def showCards(self):
+    # show cards in hand
         for index in range(len(self.cardsInHand)):
             print(self.cardsInHand[index].color, self.cardsInHand[index].rank)
 pM = [0]
@@ -83,6 +88,7 @@ while True:
     else:
         break
 def startNewGame():
+    # creates and randomize deck also creates player and computer hand
     d = deck([])
     d.createDeck()
     d.randomizeDeck()
@@ -90,27 +96,18 @@ def startNewGame():
     cH = hand([])
     pH.startHand(d.cardDeck)
     cH.startHand(d.cardDeck)
-    game = None
-    return game
-def playerTurn():
+    game = ''
+    return [d,pH,cH,game]
+
+def playerTurn(pH,d,game):
+    print('Player turn')
     pH.showCards()
+    # loop for hits breaks if stay or game over
     while True:
-        while True:
-            pI = (input('Do you want to hit or stay')).lower()
-            if pI == 'hit' or pI == 'stay':
-                break
-            else:
-                print('Invalid entry try again')
-                continue
-        if pI == hit and d.cardDeck:
-            pH.hit(d.cardDeck)
-        else:
-            break
-        pH.showCards()
-        for idx in len(pH.cardDeck):
-            if pH.cardDeck[idx].value == 'ask user':
-                pH.cardDeck[idx].value = int(input('plase enter 1 or 11 for this ace'))
-        value = sum(int([pH.cardDeck[idx].value for idx in len(pH.cardDeck)]))
+        for idx in range(len(pH.cardsInHand)):
+            if pH.cardsInHand[idx].value == 'ask user':
+                pH.cardsInHand[idx].value = int(input("plase enter 1 or 11 for this ace \n"))
+        value = sum([pH.cardsInHand[idx].value for idx in range(len(pH.cardsInHand))])
         if value > 21:
             game = 'lose'
             print('You lose')
@@ -118,14 +115,30 @@ def playerTurn():
         elif value == 21:
             game = 'win'
             print('You win')
-    return value,game
-def computerTurn(pValue):
+        while True:
+            pI = (input("Do you want to hit or stay \n")).lower()
+            if pI == 'hit' or pI == 'stay':
+                break
+            else:
+                print('Invalid entry try again')
+                continue
+        if pI == 'hit' and d.cardDeck:
+            pH.hit(d.cardDeck)
+            pH.showCards()
+            continue
+        elif pI == 'stay':
+            break
+    return [pH,d,value,game]
+
+def computerTurn(pValue,cH,d,game):
+    print('computer turn')
     cH.showCards()
+    # loop for hits breaks if stay or game over
     while True:
-        for idx in len(pH.cardDeck):
-            if cH.cardDeck[idx].value == 'ask user':
-                cH.cardDeck[idx].value = int(input('plase enter 1 or 11 for this ace'))
-        value = sum(int([pH.cardDeck[index].rank for index in len(pH.cardDeck)]))
+        for idx in range(len(cH.cardsInHand)):
+            if cH.cardsInHand[idx].value == 'ask user':
+                cH.cardsInHand[idx].value = int(input("plase enter 1 or 11 for this ace \n"))
+        value = sum([cH.cardsInHand[index].value for index in range(len(cH.cardsInHand))])
         if value < 16:
             cH.hit(d.cardDeck)
             if value > 21:
@@ -155,12 +168,34 @@ def computerTurn(pValue):
         if pValue < value:
             cH.showCards()
             break
-        return value,game 
-def blackJackGame():
-    game = startNewGame()
-    while game == None:
-        pValue,game = playerTurn()
-        if game:
+    return [cH,d,value,game]
+
+def blackJackGame(pS):
+    while True:
+        [d,pH,cH,game]= startNewGame()
+        while game == '':
+            [pH,d,pValue,game] = playerTurn(pH,d,game)
+            if game != '':
+                break
+            [cH,d,value,game] = computerTurn(pValue,cH,d,game)
+            if game != '':
+                break
+        if game == 'win':
+            pS[0] += 1
+            pS[2] += pM[0]
+        elif game == 'lose':
+            pS[1] += 1
+            pS[2] -= pM[0]
+        while True:
+            pI = (input("Do you want to hit or stay \n")).lower()
+            if pI == 'yes' or pI == 'no' or pI == 'y' or pI == 'n':
+                break
+            else:
+                print('Invalid entry try again')
+                continue 
+        if pI == 'yes' or 'y':
+            continue
+        elif pI == 'no' or 'n':
             break
-        value,game = computerTurn(pValue)
-blackJackGame()
+
+blackJackGame(pS)
